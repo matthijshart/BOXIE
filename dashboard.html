@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="site.webmanifest" />
+  <meta name="theme-color" content="#0b0f19" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <title>Rendi — Dashboard</title>
+  <meta name="description" content="Rendi dashboard: rustig overzicht van je box‑3 jaar." />
+</head>
+<body data-page="dashboard">
+<header class="topbar" role="banner">
+    <div class="wrap">
+      <div class="topbarInner">
+        <a class="brand" href="dashboard.html" aria-label="Rendi dashboard">
+          <span class="mark" aria-hidden="true">R</span>
+          <span>
+            <strong>Rendi</strong>
+            <small>Box 3, rustig geregeld</small>
+          </span>
+        </a>
+
+        <div class="spacer" aria-hidden="true"></div>
+
+        <div class="controlRow" aria-label="Dashboard controls">
+          <select class="select" id="yearSelect" aria-label="Belastingjaar">
+            <option value="2028">Jaar 2028</option>
+            <option value="2029">Jaar 2029</option>
+            <option value="2030">Jaar 2030</option>
+          </select>
+          <button class="iconBtn" id="openMenu" type="button" aria-label="Menu">Menu</button>
+          <button class="iconBtn" id="resetBtn" type="button" aria-label="Reset demo">Reset</button>
+        </div>
+      </div>
+
+      <div class="completion" aria-label="Compleetheid">
+        <div class="compRow">
+          <span>Compleet</span>
+          <div class="track" aria-hidden="true">
+            <div class="bar" id="completionBar"></div>
+          </div>
+          <span id="compPct">0%</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="overlay" id="overlay" aria-hidden="true"></div>
+  <div class="sheet" id="sheet" aria-hidden="true" role="dialog" aria-label="Menu">
+    <div class="sheetTop">
+      <strong style="letter-spacing:-.02em;">Menu</strong>
+      <button class="close" id="closeMenu" type="button" aria-label="Sluiten">✕</button>
+    </div>
+    <a class="sheetLink" href="dashboard.html">Dashboard</a>
+    <a class="sheetLink" href="bank.html">Bank & sparen</a>
+    <a class="sheetLink" href="beleggen.html">Beleggingen</a>
+    <a class="sheetLink" href="vastgoed.html">Vastgoed</a>
+    <a class="sheetLink" href="leningen.html">Vorderingen & schulden</a>
+    <a class="sheetLink" href="crypto.html">Crypto</a>
+    <a class="sheetLink" href="#export">Export</a>
+    <a class="sheetLink" href="index.html">Uitloggen (demo)</a>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <main class="wrap">
+    <section aria-label="Intro">
+      <h1 class="h1">Dashboard</h1>
+      <p class="lead">
+        Dit is jouw jaaroverzicht. Je ziet alleen wat nog aandacht vraagt.
+        Als iets afwijkt, laat Rendi het je weten — en kun je het corrigeren.
+      </p>
+      <p class="miniLead">
+        Tip: dit is een demo. Je kunt de status per categorie wijzigen door de categoriepagina te openen en op “Opslaan & markeer als klaar” te klikken.
+      </p>
+    </section>
+
+    <section class="grid" aria-label="Kern">
+      <article class="card" aria-label="Aandacht">
+        <div class="cardHead">
+          <h2>Wat heeft aandacht</h2>
+          <span class="status warn"><span class="sDot" aria-hidden="true"></span><span class="label">Prioriteit</span></span>
+        </div>
+        <p>Korte lijst. Zodat je niet hoeft te zoeken.</p>
+
+        <div class="list" id="attentionList" aria-label="Aandachtspunten"></div>
+
+        <div class="foot">
+          Betrouwbaarheid: je kunt per categorie altijd terug naar de bron (upload → herkenning → resultaat).
+        </div>
+      </article>
+
+      <article class="card" aria-label="Export">
+        <div class="cardHead">
+          <h2>Export voor IB‑aangifte</h2>
+        </div>
+        <p id="exportHint">Export komt beschikbaar zodra je uploads compleet zijn en de checklist is nagelopen.</p>
+
+        <div class="copy">
+          <label for="copyText">Kopieer‑blok</label>
+          <textarea id="copyText" readonly>Niet beschikbaar.</textarea>
+          <div class="btnRow" style="margin-top:10px;">
+            <button class="btn btnPrimary btnSmall" id="copyBtn" type="button" disabled>Kopieer</button>
+            <span id="copyMsg" style="color: rgba(11,15,25,.55); font-size:12px; align-self:center;"></span>
+          </div>
+        </div>
+
+        <div class="foot">
+          In productie kun je hier ook een jaarrapport (PDF) downloaden, inclusief bijlagenlijst.
+        </div>
+      </article>
+    </section>
+
+    <section class="card" aria-label="Categorieën" style="margin-top:14px;">
+      <div class="cardHead">
+        <h2>Categorieën</h2>
+        <span class="status todo"><span class="sDot" aria-hidden="true"></span><span class="label">Overzicht</span></span>
+      </div>
+      <p>Open een categorie. Upload. Controleer. Klaar.</p>
+
+      <div class="list">
+        <div class="row" data-cat="bank">
+          <div class="left">
+            <div class="ico" aria-hidden="true">🏦</div>
+            <div class="title">
+              <strong>Bank & sparen</strong>
+              <span>Rente en bankkosten uit je export. <span style="opacity:.7">Uploads:</span> <span data-files>0</span></span>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <span class="status todo" data-status="bank"><span class="sDot" aria-hidden="true"></span><span class="label">Nog nodig</span></span>
+            <a class="btn btnGhost btnSmall" href="bank.html">Open</a>
+          </div>
+        </div>
+
+        <div class="row" data-cat="beleggingen">
+          <div class="left">
+            <div class="ico" aria-hidden="true">📈</div>
+            <div class="title">
+              <strong>Beleggingen</strong>
+              <span>Dividend, kosten en waardeontwikkeling. <span style="opacity:.7">Uploads:</span> <span data-files>0</span></span>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <span class="status todo" data-status="beleggingen"><span class="sDot" aria-hidden="true"></span><span class="label">Nog nodig</span></span>
+            <a class="btn btnGhost btnSmall" href="beleggen.html">Open</a>
+          </div>
+        </div>
+
+        <div class="row" data-cat="vastgoed">
+          <div class="left">
+            <div class="ico" aria-hidden="true">🏠</div>
+            <div class="title">
+              <strong>Vastgoed</strong>
+              <span>WOZ / huur / onderhoud. <span style="opacity:.7">Uploads:</span> <span data-files>0</span></span>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <span class="status todo" data-status="vastgoed"><span class="sDot" aria-hidden="true"></span><span class="label">Nog nodig</span></span>
+            <a class="btn btnGhost btnSmall" href="vastgoed.html">Open</a>
+          </div>
+        </div>
+
+        <div class="row" data-cat="leningen">
+          <div class="left">
+            <div class="ico" aria-hidden="true">🤝</div>
+            <div class="title">
+              <strong>Vorderingen & schulden</strong>
+              <span>Rente en aflossingen. <span style="opacity:.7">Uploads:</span> <span data-files>0</span></span>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <span class="status todo" data-status="leningen"><span class="sDot" aria-hidden="true"></span><span class="label">Nog nodig</span></span>
+            <a class="btn btnGhost btnSmall" href="leningen.html">Open</a>
+          </div>
+        </div>
+
+        <div class="row" data-cat="crypto" style="border-bottom:0;">
+          <div class="left">
+            <div class="ico" aria-hidden="true">🪙</div>
+            <div class="title">
+              <strong>Crypto (optioneel)</strong>
+              <span>Exchange‑export of handmatig. <span style="opacity:.7">Uploads:</span> <span data-files>0</span></span>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <span class="status todo" data-status="crypto"><span class="sDot" aria-hidden="true"></span><span class="label">Nog nodig</span></span>
+            <a class="btn btnGhost btnSmall" href="crypto.html">Open</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot">
+        Disclaimer: concept‑dashboard. Rendi is een reken‑ en organiseerhulpmiddel; geen individueel belastingadvies.
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

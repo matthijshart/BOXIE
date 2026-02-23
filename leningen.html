@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="site.webmanifest" />
+  <meta name="theme-color" content="#0b0f19" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <title>Rendi — Vorderingen & schulden</title>
+  <meta name="description" content="Vorderingen & schulden in Rendi." />
+</head>
+<body data-page="category" data-category="leningen">
+<header class="topbar" role="banner">
+    <div class="wrap">
+      <div class="topbarInner">
+        <a class="brand" href="dashboard.html" aria-label="Rendi dashboard">
+          <span class="mark" aria-hidden="true">R</span>
+          <span>
+            <strong>Rendi</strong>
+            <small>Box 3, rustig geregeld</small>
+          </span>
+        </a>
+
+        <div class="spacer" aria-hidden="true"></div>
+
+        <div class="controlRow" aria-label="Dashboard controls">
+          <select class="select" id="yearSelect" aria-label="Belastingjaar">
+            <option value="2028">Jaar 2028</option>
+            <option value="2029">Jaar 2029</option>
+            <option value="2030">Jaar 2030</option>
+          </select>
+          <button class="iconBtn" id="openMenu" type="button" aria-label="Menu">Menu</button>
+          <button class="iconBtn" id="resetBtn" type="button" aria-label="Reset demo">Reset</button>
+        </div>
+      </div>
+
+      <div class="completion" aria-label="Compleetheid">
+        <div class="compRow">
+          <span>Compleet</span>
+          <div class="track" aria-hidden="true">
+            <div class="bar" id="completionBar"></div>
+          </div>
+          <span id="compPct">0%</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="overlay" id="overlay" aria-hidden="true"></div>
+  <div class="sheet" id="sheet" aria-hidden="true" role="dialog" aria-label="Menu">
+    <div class="sheetTop">
+      <strong style="letter-spacing:-.02em;">Menu</strong>
+      <button class="close" id="closeMenu" type="button" aria-label="Sluiten">✕</button>
+    </div>
+    <a class="sheetLink" href="dashboard.html">Dashboard</a>
+    <a class="sheetLink" href="bank.html">Bank & sparen</a>
+    <a class="sheetLink" href="beleggen.html">Beleggingen</a>
+    <a class="sheetLink" href="vastgoed.html">Vastgoed</a>
+    <a class="sheetLink" href="leningen.html">Vorderingen & schulden</a>
+    <a class="sheetLink" href="crypto.html">Crypto</a>
+    <a class="sheetLink" href="#export">Export</a>
+    <a class="sheetLink" href="index.html">Uitloggen (demo)</a>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <main class="wrap">
+    <section aria-label="Header">
+      <h1 class="h1" id="pageTitle">Vorderingen & schulden</h1>
+      <p class="lead">Vul rente en hoofdsom in. Upload eventueel afspraken/overzichten. Markeer als klaar.</p>
+
+      <div class="stepper" aria-label="Stappen">
+        <span class="stepPill" id="step1"><span class="n">1</span> Upload</span>
+        <span class="stepPill" id="step2"><span class="n">2</span> Controle</span>
+        <span class="stepPill" id="step3"><span class="n">3</span> Klaar</span>
+      </div>
+    </section>
+
+    <section class="gridPage" aria-label="Invoer">
+      <article class="card" aria-label="Uploads">
+        <div class="cardHead">
+          <h2>Uploads</h2>
+          <span class="status todo" id="catStatus"><span class="sDot" aria-hidden="true"></span><span class="label">Nog nodig</span></span>
+        </div>
+        <p>Sleep je export hier in. Of start met een voorbeeld.</p>
+
+        <div class="drop" id="drop" aria-label="Upload zone">
+          <div>
+            <strong>Sleep hier of kies bestanden</strong>
+            <span>PDF, CSV, XLSX — we gebruiken dit als bewijsmap.</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <input class="fileInput" id="fileInput" type="file" multiple />
+            <button class="btn btnPrimary btnSmall" id="filePick" type="button">Bestanden kiezen</button>
+            <button class="btn btnGhost btnSmall" id="exampleBtn" type="button">Voorbeeld</button>
+          </div>
+        </div>
+
+        <ul class="files" id="fileList" aria-label="Bestandenlijst"></ul>
+
+        <details class="details" id="sources">
+          <summary>Bronnen</summary>
+          <p>In productie zie je hier ook welke regels uit een document zijn herkend. (Demo: bestandsnamen.)</p>
+          <ul style="margin:10px 0 0; padding-left:18px; color:rgba(11,15,25,.70); font-size:13px; line-height:1.6;"></ul>
+        </details>
+      </article>
+
+      <aside class="card" aria-label="Controle en samenvatting">
+        <div class="cardHead">
+          <h2>Controle</h2>
+          <a class="btnLink" href="dashboard.html">← Dashboard</a>
+        </div>
+
+        <div class="help" id="needUpload" style="margin-top:8px;">
+          Upload eerst een bestand (of gebruik het voorbeeld). Daarna kun je de velden controleren.
+        </div>
+
+        <form class="form" id="catForm">
+<div class="field">
+  <label for="counterparty">Tegenpartij</label>
+  <input class="input" id="counterparty" placeholder="bijv. lening aan familie / eigen BV" />
+</div>
+
+<div class="grid2">
+  <div class="field">
+    <label for="principalBegin">Hoofdsom 1‑1</label>
+    <input class="input" id="principalBegin" inputmode="decimal" placeholder="0" />
+  </div>
+  <div class="field">
+    <label for="principalEnd">Hoofdsom 31‑12</label>
+    <input class="input" id="principalEnd" inputmode="decimal" placeholder="0" />
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="field">
+    <label for="interestReceived">Rente ontvangen</label>
+    <input class="input" id="interestReceived" inputmode="decimal" placeholder="0" />
+  </div>
+  <div class="field">
+    <label for="interestPaid">Rente betaald</label>
+    <input class="input" id="interestPaid" inputmode="decimal" placeholder="0" />
+  </div>
+</div>
+
+<div class="field">
+  <label for="note">Notitie (optioneel)</label>
+  <textarea id="note" class="input" placeholder="Bijv. bijzondere afspraken / kwijtschelding"></textarea>
+</div>
+          <div class="btnRow">
+            <button class="btn btnPrimary" id="saveBtn" type="submit">Opslaan & markeer als klaar</button>
+            <button class="btn btnGhost" id="laterBtn" type="button">Later</button>
+          </div>
+          <div class="help">
+            Betrouwbaarheid: bij elk veld hoort in productie een “waar komt dit vandaan?” link.
+          </div>
+        </form>
+
+        <div class="kpiGrid" id="summary" style="margin-top:14px;">
+          <div class="kpi"><span>Status</span><strong data-st>—</strong></div>
+          <div class="kpi"><span>Uploads</span><strong><span data-files>0</span></strong></div>
+          <div class="kpi total"><span>Resultaat (demo)</span><strong data-res>—</strong></div>
+          <div data-detail style="display:grid; gap:10px;"></div>
+        </div>
+
+        
+      </aside>
+    </section>
+
+    <div class="foot">Disclaimer: concept‑pagina. Geen individueel belastingadvies.</div>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
