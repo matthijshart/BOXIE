@@ -26,7 +26,7 @@
 html{ scroll-behavior: smooth; }
 body{
   margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   color: var(--ink);
   background:
     radial-gradient(900px 560px at 15% -10%, rgba(0,0,0,.04), transparent 60%),
